@@ -1,0 +1,154 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="row">
+    <div class="col-md-5">
+         <!--
+            Mensaje Exito y Error
+        -->
+        {% with messages = get_flashed_messages()  %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <div class="card card-body">
+            <form action="{{url_for('addTratamiento')}}" method="POST">
+                            
+              <div class="form-group">
+                <select class="form-control" name="Id_Paciente" aria-label="Default select example">
+                    <option selected>Favor seleccionar Paciente</option>
+                    {% for paciente in pacientes %}
+                      <option  value="{{paciente['id']}}" >{{paciente["Identificacion"]}} - {{paciente["Nombre"]}}</option>
+                    {% endfor %}
+                  </select>
+              </div>
+              <br />
+              <div class="form-group">
+                <input type="text" class="form-control" name="Temperatura" placeholder="Temperatura">
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" name="Malestar" placeholder="Malestar">
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" name="FechaIngreso" placeholder="Fecha de Ingreso">
+              </div>
+              
+              <div class="form-group">
+                <select class="form-control" name="Id_Medico" aria-label="Default select example">
+                    <option selected>Favor seleccionar Medico</option>
+                    {% for medico in medicos %}
+                      <option  value="{{medico['id']}}" >{{medico["Identificacion"]}} - {{medico["Nombre"]}}</option>
+                    {% endfor %}
+                  </select>
+              </div>
+              <br />
+              
+              <div class="form-group">
+                <input type="text" class="form-control" name="Procedimiento" placeholder="Procedimiento">
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" name="N_Cama" placeholder="Numero de la cama">
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" name="Diagnostico" placeholder="Diagnostico">
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" name="Gravedad_Malestar" placeholder="Gravedad del Malestar">
+              </div>
+
+              <div class="form-group">
+                <select class="form-control" name="Id_Concepto" aria-label="Default select example">
+                    <option selected>Favor seleccionar Estado del paciente</option>
+                    {% for concepto in conceptos %}
+                      <option  value="{{concepto['id']}}" > {{concepto["Nombre"]}}</option>
+                    {% endfor %}
+                  </select>
+              </div>
+              <br />
+              <button class="btn btn-primary btn-block">
+                Guardar 
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="col-md-7">
+            <table class="table table-striped table-hover table-bordered table-sm bg-white">
+              <thead>
+                <tr>
+                  <td>N°</td>
+                  <td>Paciente</td>
+                  <td>Temperatura</td>
+                  <td>Malestar</td>
+                  <td>Fecha Ingreso</td>  
+                  <td>Medico</td>
+                  <td>Procedimiento</td>
+                  <td>Numero de Cama</td>
+                  <td>Diagnostico</td>   
+                  <td>Gravedad del Malestar</td>
+                  <td>Estado</td>    
+                  <td>Cambio de Estado</td>             
+                </tr>
+              </thead>
+              <tbody>
+                
+                {% for tratamiento in tratamientos %}
+                <tr>
+                    
+                  <td>{{tratamiento["id"]}}</td>
+                  {% for paciente in pacientes %}
+                      {% if tratamiento["Id_Paciente"] == paciente["id"]  %}
+                      <td>
+                        {{paciente["Nombre"]}}
+                      </td>
+                      {% endif  %}
+                  {%  endfor %}   
+                  <td>{{tratamiento["Temperatura"]}}</td>
+                  <td>{{tratamiento["Malestar"]}}</td>
+                  <td>{{tratamiento["FechaIngreso"]}}</td>
+                  {% for medico in medicos %}
+                      {% if tratamiento["Id_Medico"] == medico["id"]  %}
+                      <td>
+                        {{medico["Nombre"]}}
+                      </td>
+                      {% endif  %}
+                  {%  endfor %}                  
+                  <td>{{tratamiento["Procedimiento"]}}</td>
+                  <td>{{tratamiento["N_Cama"]}}</td>
+                  <td>{{tratamiento["Diagnostico"]}}</td>
+                  <td>{{tratamiento["Gravedad_Malestar"]}}</td>
+                  {% for concepto in conceptos %}
+                      {% if tratamiento["Id_Concepto"] == concepto["id"]  %}
+                      <td>
+                        {{concepto["Nombre"]}}
+                      </td>
+                      {% endif  %}
+                  {%  endfor %} 
+                  <td>
+                    <a href="/cambioE/{{tratamiento.id}}" class="btn btn-danger btn-delete">Cambio de Estado</a>
+                  </td> 
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+    
+    </div>
+    
+</div>
+
+                {% for resultado in resultados %}
+                     
+                      <td>
+                        {{resultado.concepto.Nombre}}
+                      </td>
+                      
+                  {%  endfor %} 
+
+{% endblock %}

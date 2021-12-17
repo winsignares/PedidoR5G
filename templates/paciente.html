@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="row">
+    <div class="col-md-5">
+         <!--
+            Mensaje Exito y Error
+        -->
+        {% with messages = get_flashed_messages()  %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <div class="card card-body">
+            <form action="{{url_for('addPaciente')}}" method="POST">
+              <div class="form-group">
+                <input type="text" class="form-control" name="Identificacion" placeholder="Identificacion">
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" name="tipo_id" placeholder="Tipo de Identificacion">
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" name="Nombre" placeholder="Nombre">
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" name="genero" placeholder="genero">
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" name="edad" placeholder="edad">
+              </div>
+              
+              <button class="btn btn-primary btn-block">
+                Guardar 
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="col-md-7">
+            <table class="table table-striped table-hover table-bordered table-sm bg-white">
+              <thead>
+                <tr>
+                  <td>N°</td>
+                  <td>Identificacion</td>
+                  <td>Tipo de Identificacion</td>
+                  <td>Nombre</td>
+                  <td>genero</td>
+                  <td>edad</td>
+                  
+                </tr>
+              </thead>
+              <tbody>
+                
+                {% for paciente in pacientes %}
+                <tr>
+                  <td>{{paciente["id"]}}</td>
+                  <td>{{paciente["Identificacion"]}}</td>
+                  <td>{{paciente["tipo_id"]}}</td>
+                  <td>{{paciente["Nombre"]}}</td>
+                  <td>{{paciente["genero"]}}</td>
+                  <td>{{paciente["edad"]}}</td>                  
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+    
+    </div>
+    
+</div>
+
+{% endblock %}
